@@ -1,0 +1,61 @@
+[workspace]
+members = [
+    "crates/claude-bridge",
+    "crates/cb-core",
+    "crates/cb-codex",
+    "crates/cb-gemini",
+    "crates/cb-commands",
+]
+resolver = "2"
+
+[workspace.package]
+version = "1.0.0"
+edition = "2021"
+rust-version = "1.70"
+authors = ["Claude Bridge Contributors"]
+license = "MIT"
+
+[workspace.dependencies]
+# Async runtime
+tokio = { version = "1.35", features = ["full"] }
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Error handling
+anyhow = "1.0"
+thiserror = "1.0"
+color-eyre = "0.6"
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# CLI
+clap = { version = "4.4", features = ["derive"] }
+
+# File watching
+notify = "6.1"
+
+# Regex
+regex = "1.10"
+
+# Async utilities
+tokio-stream = "0.1"
+async-trait = "0.1"
+
+# Temporary files
+tempfile = "3.8"
+
+# Unix APIs (FIFO creation)
+nix = { version = "0.27", features = ["fs", "process"] }
+
+# Date/time
+chrono = { version = "0.4", features = ["serde"] }
+
+# Lazy static
+once_cell = "1.19"
+
+# Home directory
+dirs = "5.0"

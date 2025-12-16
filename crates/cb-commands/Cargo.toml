@@ -1,0 +1,32 @@
+[package]
+name = "cb-commands"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+cb-core = { path = "../cb-core" }
+cb-codex = { path = "../cb-codex" }
+clap = { workspace = true }
+anyhow = { workspace = true }
+tokio = { workspace = true, features = ["rt-multi-thread"] }
+color-eyre = { workspace = true }
+
+# Binary targets
+[[bin]]
+name = "cask"
+path = "src/bin/cask.rs"
+
+[[bin]]
+name = "cask-w"
+path = "src/bin/cask-w.rs"
+
+[[bin]]
+name = "cpend"
+path = "src/bin/cpend.rs"
+
+[[bin]]
+name = "cping"
+path = "src/bin/cping.rs"

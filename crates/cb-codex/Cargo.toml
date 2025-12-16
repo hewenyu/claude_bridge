@@ -1,0 +1,22 @@
+[package]
+name = "cb-codex"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+cb-core = { path = "../cb-core" }
+tokio = { workspace = true, features = ["io-util", "fs", "sync", "time"] }
+serde = { workspace = true }
+serde_json = { workspace = true }
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+notify = { workspace = true }
+regex = { workspace = true }
+tokio-stream = { workspace = true }
+once_cell = { workspace = true }
+chrono = { workspace = true }
+dirs = { workspace = true }

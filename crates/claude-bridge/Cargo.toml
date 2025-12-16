@@ -1,0 +1,23 @@
+[package]
+name = "claude-bridge"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "claude_bridge"
+path = "src/main.rs"
+
+[dependencies]
+clap = { workspace = true, features = ["derive", "env"] }
+anyhow = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+tokio = { workspace = true, features = ["rt-multi-thread", "process", "signal"] }
+cb-core = { path = "../cb-core" }
+cb-codex = { path = "../cb-codex" }
+cb-gemini = { path = "../cb-gemini" }
+color-eyre = { workspace = true }
+serde_json = { workspace = true }

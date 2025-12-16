@@ -1,0 +1,19 @@
+[package]
+name = "cb-gemini"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+cb-core = { path = "../cb-core" }
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+anyhow = { workspace = true }
+tracing = { workspace = true }
+notify = { workspace = true }
+chrono = { workspace = true }
+# For project hash calculation
+sha2 = "0.10"

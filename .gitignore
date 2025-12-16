@@ -1,5 +1,17 @@
-__pycache__/
-*.pyc
-.codex-session
-.gemini-session
-.claude/
+# Rust 构建产物
+/target/
+**/*.rs.bk
+*.pdb
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+
+# 临时文件
+*.tmp
