@@ -28,7 +28,13 @@ pub struct SessionInfo {
     pub session_id: String,
     pub provider: Provider,
     pub runtime_dir: PathBuf,
-    pub tmux_session: String,
+
+    /// PTY session ID (替代 tmux_session)
+    pub pty_session_id: String,
+
+    /// 进程 PID
+    pub pid: Option<u32>,
+
     pub work_dir: PathBuf,
     pub active: bool,
     pub started_at: DateTime<Utc>,
@@ -242,7 +248,8 @@ mod tests {
             session_id: "test-123".to_string(),
             provider: Provider::Codex,
             runtime_dir: temp.path().to_path_buf(),
-            tmux_session: "codex-123".to_string(),
+            pty_session_id: "codex-1000".to_string(),
+            pid: Some(1000),
             work_dir: std::env::current_dir().unwrap(),
             active: true,
             started_at: Utc::now(),
@@ -258,6 +265,7 @@ mod tests {
         assert_eq!(loaded.session_id, "test-123");
         assert_eq!(loaded.active, true);
         assert_eq!(loaded.provider, Provider::Codex);
+        assert_eq!(loaded.pty_session_id, "codex-1000");
     }
 
     #[test]
@@ -271,7 +279,8 @@ mod tests {
             session_id: "test-456".to_string(),
             provider: Provider::Codex,
             runtime_dir: temp.path().to_path_buf(),
-            tmux_session: "codex-456".to_string(),
+            pty_session_id: "codex-1001".to_string(),
+            pid: Some(1001),
             work_dir: std::env::current_dir().unwrap(),
             active: true,
             started_at: Utc::now(),

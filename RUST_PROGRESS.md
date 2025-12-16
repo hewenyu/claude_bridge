@@ -1,6 +1,17 @@
 # Rust 重构进度报告
 
-## ✅ 已完成（第一阶段）
+## 🚀 重大架构升级：从 tmux 到 portable-pty
+
+**2025-12-16 重大决策**：采用 `portable-pty` 替代 `tmux`，实现真正的纯 Rust 终端工具！
+
+### 为什么改用 portable-pty？
+
+1. **单一二进制**：无需外部依赖（tmux），一个文件解决所有问题
+2. **跨平台**：Linux + macOS + Windows（ConPTY）
+3. **完全控制**：Rust 代码完全掌控 PTY 生命周期
+4. **终端工具本质**：这是一个终端工具，应该直接使用 PTY
+
+## ✅ 已完成（Phase 1 + PTY 重构）
 
 ### 项目结构搭建
 - ✅ 创建 Cargo workspace 配置
@@ -15,31 +26,101 @@
 
 - ✅ **session.rs** - Session 状态管理
   - Provider 枚举（Codex/Gemini）
-  - SessionInfo 结构体（支持扩展字段）
+  - SessionInfo 结构体（**新增 pty_session_id 和 pid 字段**）
   - SessionManager trait（抽象接口）
   - FileSessionManager 实现（原子写入）
   - 健康检查（runtime dir, PID验证）
   - ✅ 单元测试通过
 
-- ✅ **tmux.rs** - Tmux 抽象层
-  - TmuxExecutor trait（异步接口）
-  - SystemTmux 实现（真实 tmux 调用）
-  - MockTmux 实现（测试用）
-  - 完整的 tmux 操作（session, buffer, keys等）
+- ✅ **pty.rs** - PTY 会话管理（**新增，替代 tmux**）
+  - PtyExecutor trait（异步接口）
+  - SystemPty 实现（使用 portable-pty）
+  - MockPty 实现（完整的测试 mock）
+  - 支持 spawn, send_input, read_output, kill 等操作
+  - ✅ 3 个单元测试通过
+
+- ✅ **daemon.rs** - 守护进程架构（**新增**）
+  - SessionDaemon（Unix socket 服务器）
+  - DaemonClient（客户端连接）
+  - 支持 Create, Attach, List, Kill 操作
+  - 类似 tmux 的 attach/detach 功能，纯 Rust 实现
   - ✅ 单元测试通过
+
+- 🔄 **tmux.rs** - 已废弃（保留用于向后兼容）
+  - 标记为 deprecated
+  - 测试仍然通过
 
 ### 测试验证
 ```
-running 4 tests
-test tmux::tests::test_buffer_operations ... ok
-test tmux::tests::test_mock_tmux ... ok
+running 8 tests
+test daemon::tests::test_daemon_basic ... ok
+test pty::tests::test_mock_pty_io ... ok
+test pty::tests::test_mock_pty_kill ... ok
+test pty::tests::test_mock_pty_spawn ... ok
 test session::tests::test_session_save_load ... ok
 test session::tests::test_mark_inactive ... ok
+test tmux::tests::test_buffer_operations ... ok (deprecated)
+test tmux::tests::test_mock_tmux ... ok (deprecated)
 
-test result: ok. 4 passed; 0 failed
+test result: ok. 8 passed; 0 failed
 ```
 
+**测试覆盖**：
+- ✅ PTY 会话创建和管理
+- ✅ PTY I/O 操作
+- ✅ Session 持久化
+- ✅ 守护进程通信
+- ✅ 向后兼容测试
+
 ## 🔧 技术亮点
+
+### 新架构的优势
+
+#### 1. 完全独立的二进制
+```bash
+# 无需安装 tmux
+cargo install claude-bridge
+
+# 直接运行，单个二进制包含一切
+claude_bridge up codex
+```
+
+#### 2. PTY 会话管理
+```rust
+// 直接创建 PTY，完全控制
+let pty = SystemPty::new();
+let session_id = pty.spawn_session(
+    "codex",
+    "codex",
+    &["--full-auto"],
+    cwd,
+    PtyConfig::default()
+).await?;
+
+// 发送输入
+pty.send_input(&session_id, "pwd").await?;
+
+// 读取输出
+let output = pty.read_output(&session_id).await?;
+```
+
+#### 3. 守护进程架构
+```rust
+// 启动守护进程
+let daemon = SessionDaemon::new("/tmp/cb.sock".into());
+daemon.start().await?;
+
+// 客户端连接
+let client = DaemonClient::new("/tmp/cb.sock".into());
+let response = client.send_request(DaemonRequest::List).await?;
+```
+
+#### 4. 跨平台支持
+- **Linux**: Unix PTY + inotify
+- **macOS**: Unix PTY + FSEvents
+- **Windows**: ConPTY（未来支持）
+
+### 原有技术亮点
 
 ### 1. 类型安全的错误处理
 ```rust

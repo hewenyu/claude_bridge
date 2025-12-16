@@ -11,10 +11,13 @@ serde = { workspace = true }
 serde_json = { workspace = true }
 thiserror = { workspace = true }
 anyhow = { workspace = true }
-tokio = { workspace = true, features = ["process", "io-util", "fs"] }
+tokio = { workspace = true, features = ["process", "io-util", "fs", "net", "sync"] }
 tracing = { workspace = true }
 async-trait = { workspace = true }
 tempfile = { workspace = true }
 nix = { workspace = true }
 chrono = { workspace = true }
 dirs = { workspace = true }
+portable-pty = { workspace = true }
+tokio-util = { workspace = true }
+futures = { workspace = true }

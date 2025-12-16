@@ -48,8 +48,8 @@ async-trait = "0.1"
 # Temporary files
 tempfile = "3.8"
 
-# Unix APIs (FIFO creation)
-nix = { version = "0.27", features = ["fs", "process"] }
+# Unix APIs (FIFO, process management)
+nix = { version = "0.27", features = ["fs", "process", "signal"] }
 
 # Date/time
 chrono = { version = "0.4", features = ["serde"] }
@@ -59,3 +59,10 @@ once_cell = "1.19"
 
 # Home directory
 dirs = "5.0"
+
+# PTY (替代 tmux)
+portable-pty = "0.8"
+
+# Async I/O utilities
+tokio-util = { version = "0.7", features = ["codec"] }
+futures = "0.3"
