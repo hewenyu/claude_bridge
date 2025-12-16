@@ -8,7 +8,7 @@ license.workspace = true
 
 [dependencies]
 cb-core = { path = "../cb-core" }
-tokio = { workspace = true, features = ["io-util", "fs", "sync", "time"] }
+tokio = { workspace = true, features = ["io-util", "fs", "sync", "time", "rt"] }
 serde = { workspace = true }
 serde_json = { workspace = true }
 anyhow = { workspace = true }
@@ -20,3 +20,9 @@ tokio-stream = { workspace = true }
 once_cell = { workspace = true }
 chrono = { workspace = true }
 dirs = { workspace = true }
+
+[target.'cfg(unix)'.dependencies]
+nix = { workspace = true, features = ["signal"] }
+
+[dev-dependencies]
+tempfile = { workspace = true }

@@ -177,31 +177,47 @@ fn process_alive(_pid: i32) -> bool {
 }
 ```
 
-## 📋 下一步任务（Week 3-4）
+## 📋 Week 3-4 进度（cb-codex 通信核心）
 
-### cb-codex 通信核心
-- [ ] **fifo.rs** - FIFO 读写工具
-  - 异步 FIFO 打开（带超时）
-  - 非阻塞读写
-
-- [ ] **log_reader.rs** - 日志文件监控（关键模块）
-  - ✨ notify 文件监控（替代轮询）
+### ✅ 已完成
+- ✅ **log_reader.rs** - 日志文件监控（关键模块）
+  - ✨ notify 文件监控（事件驱动，替代轮询）
   - capture_state() 状态捕获
   - wait_for_message() 事件驱动等待
+  - try_get_message() 非阻塞读取
+  - latest_message() 获取最新消息
   - extract_message() JSON 解析
-  - Session ID 提取（正则 + 多源）
+  - extract_session_id() Session ID 提取（正则 + 多源）
+  - ✅ 6 个单元测试全部通过
 
-- [ ] **bridge.rs** - FIFO 桥接守护进程
+- ✅ **communicator.rs** - 高级 API
+  - ask_async() - 异步发送（fire-and-forget）
+  - ask_sync() - 同步发送并等待回复
+  - consume_pending() - 获取待处理回复
+  - ping() - 健康检查
+  - get_status() - 获取会话状态
+  - remember_codex_session() - 记住日志路径
+  - ✅ 3 个单元测试全部通过
+
+### 🔄 进行中
+- [ ] **cb-commands** - 命令行工具
+  - [ ] cask - 异步发送命令
+  - [ ] cask-w - 同步发送并等待
+  - [ ] cpend - 获取待处理回复
+  - [ ] cping - 健康检查
+
+### 📋 待实现
+- [ ] **bridge.rs** - FIFO 桥接守护进程（可选，用于历史记录）
   - FIFO 读取循环
-  - Tmux 消息注入
+  - PTY 消息注入
   - 历史记录（JSONL）
   - 信号处理（优雅退出）
 
-- [ ] **communicator.rs** - 高级 API
-  - ask_async() - 异步发送
-  - ask_sync() - 同步等待
-  - consume_pending() - 获取待处理
-  - ping() - 健康检查
+- [ ] **claude-bridge** - 主启动器
+  - up 子命令
+  - status 子命令
+  - kill 子命令
+  - restore 子命令
 
 ## 🎯 MVP 目标
 
