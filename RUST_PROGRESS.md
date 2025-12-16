@@ -199,12 +199,12 @@ fn process_alive(_pid: i32) -> bool {
   - remember_codex_session() - 记住日志路径
   - ✅ 3 个单元测试全部通过
 
-### 🔄 进行中
-- [ ] **cb-commands** - 命令行工具
-  - [ ] cask - 异步发送命令
-  - [ ] cask-w - 同步发送并等待
-  - [ ] cpend - 获取待处理回复
-  - [ ] cping - 健康检查
+- ✅ **cb-commands** - 命令行工具
+  - ✅ cask - 异步发送命令（使用 CodexCommunicator::ask_async）
+  - ✅ cask-w - 同步发送并等待（支持自定义超时）
+  - ✅ cpend - 获取待处理回复（从日志倒序扫描）
+  - ✅ cping - 健康检查（支持 JSON 输出）
+  - ✅ 全部编译通过，可执行
 
 ### 📋 待实现
 - [ ] **bridge.rs** - FIFO 桥接守护进程（可选，用于历史记录）

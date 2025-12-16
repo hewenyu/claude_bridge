@@ -186,6 +186,7 @@ dependencies = [
  "cb-core",
  "clap",
  "color-eyre",
+ "serde_json",
  "tokio",
 ]
 
